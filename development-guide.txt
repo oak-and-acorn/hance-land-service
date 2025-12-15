@@ -1,0 +1,130 @@
+# Hance Land Service - Website Development Instructions
+
+## 📋 Customer Information
+- **Customer Name:** Darrin Hance
+- **Email:** hancelandservice@gmail.com
+- **Phone:** 918-541-3750
+- **Business Name:** Hance Land Service
+- **Industry:** Other
+
+## 🎯 Project Requirements
+
+### Business Overview
+We build ponds, building pads, land clearing and mulching 
+
+### Target Audience
+farmer, rancher, land and business owners and land developers 
+
+### Unique Selling Proposition
+dependable, affordable and honest quality work, 25+ yrs experience 
+
+### Primary Goal
+Generate leads
+
+## 🎨 Design Specifications
+
+### Style & Tone
+- **Vibe:** Simple, professional and easy to use 
+- **Tone of Voice:** Fun & Energetic
+- **Colors:** Orange, black and grey 
+- **Typography:** Not specified
+
+### Pages Required
+- About
+- About Us
+- Contact
+- Home
+- Portfolio
+- Services
+
+### Features Required
+- Contact Form
+
+### Call-to-Action
+contact us today
+
+### Social Media
+- facebook
+- tiktok
+
+### Domain
+Not specified
+
+### Logo
+Yes, I have a logo
+
+### Additional Information
+None provided
+
+### Design Inspiration
+None provided
+
+## 🛠️ Development Setup
+
+### Files Included
+- **index.html** - Main website file
+- **style.css** - Organized CSS with CSS variables
+- **script.js** - Basic JavaScript functionality
+
+### Quick Start
+1. Open all files in your preferred code editor
+2. Open `index.html` in a browser to see the current state
+3. Review the CSS variables in `style.css` for easy color customization
+4. Test the JavaScript functionality
+
+### Development Tasks
+
+#### Priority 1: Review & Test
+- [ ] Test the website in different browsers
+- [ ] Check mobile responsiveness
+- [ ] Verify all links and navigation work
+- [ ] Test contact form functionality
+
+#### Priority 2: Customization
+- [ ] Fine-tune colors and typography
+- [ ] Optimize images and media
+- [ ] Add/modify content per customer requirements
+- [ ] Implement specific features requested
+
+#### Priority 3: Enhancement
+- [ ] Add favicon and meta tags for SEO
+- [ ] Optimize performance (minify CSS/JS if needed)
+- [ ] Add Google Analytics or tracking if requested
+- [ ] Ensure accessibility standards
+
+#### Priority 4: Deployment
+- [ ] Set up hosting (if part of package)
+- [ ] Configure domain (if provided)
+- [ ] Test live site thoroughly
+- [ ] Provide customer with final files and instructions
+
+## 📞 Customer Communication
+
+### Initial Contact
+Send a professional email to **hancelandservice@gmail.com** acknowledging the purchase and providing:
+- Timeline for completion
+- Any clarifying questions about requirements
+- Next steps in the process
+
+### Questions to Ask Customer
+- Any specific content or images they want to provide?
+- Preferred hosting solution?
+- Any specific functionality requirements not covered?
+- Brand guidelines or existing marketing materials?
+
+## 🚀 Delivery
+
+### Final Deliverables
+- Complete website files (HTML, CSS, JS, images)
+- Instructions for hosting and maintenance
+- Basic SEO recommendations
+- Contact information for ongoing support
+
+### Timeline
+- Initial contact: Within 24 hours
+- Completion: 3-5 business days from requirements confirmation
+
+---
+
+**Generated:** 12/12/2025, 3:44:52 AM
+**Project ID:** 2025-12-12T03:43:35.266Z
