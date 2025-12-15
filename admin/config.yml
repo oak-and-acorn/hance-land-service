@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: your-username/hance-land-service # Replace with your GitHub username/repo
+  repo: jacoboakley/hance-land-service
   branch: main
 
 media_folder: "assets/images"
