@@ -12,6 +12,9 @@
   ],
   "author": "Hance Land Service",
   "license": "ISC",
+  "dependencies": {
+    "simple-oauth2": "^5.0.0"
+  },
   "devDependencies": {
     "http-server": "^14.1.1"
   }
