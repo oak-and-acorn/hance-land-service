@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: jacoboakley/hance-land-service
+  repo: oak-and-acorn/hance-land-service
   branch: main
 
 media_folder: "assets/images"
