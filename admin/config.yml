@@ -54,8 +54,6 @@ collections:
     slug: "{{slug}}"
     extension: "json"
     format: "json"
-    media_folder: "{{media_folder}}"
-    public_folder: "{{public_folder}}"
     fields:
       - { label: "Service Name", name: "title", widget: "string" }
       - { label: "Description", name: "description", widget: "markdown" }
@@ -70,8 +68,6 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: "json"
     format: "json"
-    media_folder: "{{media_folder}}"
-    public_folder: "{{public_folder}}"
     fields:
       - { label: "Project Name", name: "title", widget: "string" }
       - { label: "Category", name: "category", widget: "select", options: ["Pond Building", "Land Clearing", "Driveways", "Pads", "Mulching", "Tire Tanks", "Site Prep"] }
