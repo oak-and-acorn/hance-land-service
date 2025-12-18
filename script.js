@@ -1,12 +1,71 @@
 /**
  * Hance Land Service - JavaScript Functionality
- * Handles mobile navigation, form submission, and smooth scrolling
+ * Handles mobile navigation, form submission, smooth scrolling, and CMS content loading
  */
+
+// ============================================
+// CMS CONTENT LOADING
+// ============================================
+async function loadCMSContent() {
+  try {
+    // Load Hero Section
+    const heroData = await fetch('/content/hero.json').then(res => res.json());
+    if (heroData) {
+      const heroSection = document.querySelector('#hero h1');
+      const heroText = document.querySelector('#hero p');
+      const heroImage = document.getElementById('hero-image');
+      const heroButton = document.querySelector('#hero a');
+      
+      if (heroSection) heroSection.textContent = heroData.title;
+      if (heroText) heroText.textContent = heroData.subtitle;
+      if (heroImage && heroData.image) heroImage.src = heroData.image;
+      if (heroButton && heroData.ctaText) heroButton.textContent = heroData.ctaText;
+    }
+
+    // Load About Section
+    const aboutData = await fetch('/content/about.json').then(res => res.json());
+    if (aboutData) {
+      const aboutTitle = document.querySelector('#about h2');
+      const aboutContent = document.querySelector('#about .customizable-text');
+      const aboutImage = document.querySelector('#about img');
+      
+      if (aboutTitle) aboutTitle.textContent = aboutData.title;
+      if (aboutContent) aboutContent.innerHTML = aboutData.text;
+      if (aboutImage && aboutData.image) aboutImage.src = aboutData.image;
+    }
+
+    // Load Contact Information
+    const contactData = await fetch('/content/contact.json').then(res => res.json());
+    if (contactData) {
+      document.querySelectorAll('[data-contact="businessName"]').forEach(el => {
+        el.textContent = contactData.businessName;
+      });
+      document.querySelectorAll('[data-contact="phone"]').forEach(el => {
+        el.textContent = contactData.phone;
+        el.href = `tel:${contactData.phone.replace(/[^0-9]/g, '')}`;
+      });
+      document.querySelectorAll('[data-contact="email"]').forEach(el => {
+        el.textContent = contactData.email;
+        el.href = `mailto:${contactData.email}`;
+      });
+      document.querySelectorAll('[data-contact="address"]').forEach(el => {
+        el.textContent = contactData.address;
+      });
+    }
+
+    console.log('CMS content loaded successfully');
+  } catch (error) {
+    console.error('Error loading CMS content:', error);
+  }
+}
 
 // ============================================
 // MOBILE MENU TOGGLE
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
+  // Load CMS content when page loads
+  loadCMSContent();
+
   const mobileMenuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
 

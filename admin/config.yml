@@ -3,8 +3,18 @@ backend:
   repo: oak-and-acorn/hance-land-service
   branch: main
 
+local_backend: true
+
 media_folder: "assets/images"
 public_folder: "/assets/images"
+
+# Optional: Enable editorial workflow for draft/review/ready states
+# publish_mode: editorial_workflow
+
+# Optional: Customize the CMS slug encoding
+# slug:
+#   encoding: "ascii"
+#   clean_accents: true
 
 collections:
   - name: "settings"
@@ -41,6 +51,8 @@ collections:
     folder: "content/services"
     create: true
     slug: "{{slug}}"
+    extension: "json"
+    format: "json"
     fields:
       - { label: "Service Name", name: "title", widget: "string" }
       - { label: "Description", name: "description", widget: "markdown" }
@@ -52,10 +64,13 @@ collections:
     label: "Portfolio"
     folder: "content/portfolio"
     create: true
-    slug: "{{slug}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: "json"
+    format: "json"
     fields:
       - { label: "Project Name", name: "title", widget: "string" }
       - { label: "Category", name: "category", widget: "select", options: ["Ponds", "Land Clearing", "Driveways", "Pads", "Mulching", "Tire Tanks"] }
       - { label: "Description", name: "description", widget: "text", required: false }
       - { label: "Images", name: "images", widget: "list", field: { label: "Image", name: "image", widget: "image" } }
-      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Date", name: "date", widget: "datetime", default: "" }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false, required: false }
