@@ -2,8 +2,6 @@ backend:
   name: github
   repo: oak-and-acorn/hance-land-service
   branch: main
-  base_url: https://decap-oauth-github.vercel.app
-  auth_endpoint: /auth
 
 media_folder: "assets/images"
 public_folder: "/assets/images"
