@@ -5,6 +5,7 @@ backend:
 
 local_backend: true
 
+# Main media folder - Decap will search recursively through subfolders
 media_folder: "assets/images"
 public_folder: "/assets/images"
 
@@ -53,6 +54,8 @@ collections:
     slug: "{{slug}}"
     extension: "json"
     format: "json"
+    media_folder: "{{media_folder}}"
+    public_folder: "{{public_folder}}"
     fields:
       - { label: "Service Name", name: "title", widget: "string" }
       - { label: "Description", name: "description", widget: "markdown" }
@@ -67,9 +70,11 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: "json"
     format: "json"
+    media_folder: "{{media_folder}}"
+    public_folder: "{{public_folder}}"
     fields:
       - { label: "Project Name", name: "title", widget: "string" }
-      - { label: "Category", name: "category", widget: "select", options: ["Ponds", "Land Clearing", "Driveways", "Pads", "Mulching", "Tire Tanks"] }
+      - { label: "Category", name: "category", widget: "select", options: ["Pond Building", "Land Clearing", "Driveways", "Pads", "Mulching", "Tire Tanks", "Site Prep"] }
       - { label: "Description", name: "description", widget: "text", required: false }
       - { label: "Images", name: "images", widget: "list", field: { label: "Image", name: "image", widget: "image" } }
       - { label: "Date", name: "date", widget: "datetime", default: "" }
