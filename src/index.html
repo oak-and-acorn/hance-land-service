@@ -47,19 +47,19 @@
 
   <section class="customizable-section py-16 md:py-24 lg:py-32 px-4 customizable-primary-bg relative overflow-hidden" id="hero" data-section="hero">
     <div class="absolute inset-0">
-      <img id="hero-image" src="./assets/images/pads/pads-5.jpeg" alt="Hance Land Service Hero Image" class="w-full h-full object-cover opacity-30">
+      <img id="hero-image" src="{{ hero.image }}" alt="Hance Land Service Hero Image" class="w-full h-full object-cover opacity-30">
     </div>
     <div class="relative z-10 max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between">
       <div class="text-center lg:text-left lg:w-1/2 lg:pr-16 mb-10 lg:mb-0">
         <h1 class="customizable-heading customizable-heading-lg text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-          Transform Your Land with Hance Land Service!
+          {{ hero.title }}
         </h1>
         <p class="customizable-text text-lg lg:text-xl mb-8">
-          Building ponds, clearing land, and mulching – we bring 25+ years of dependable, honest quality work to your property. Let's get digging!
+          {{ hero.subtitle }}
         </p>
         <div class="flex justify-center lg:justify-start">
           <a href="#contact" class="customizable-btn customizable-btn-primary px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transition duration-300">
-            Contact Us Today
+            {{ hero.ctaText }}
           </a>
         </div>
       </div>
@@ -74,16 +74,15 @@
   <section class="customizable-section py-16 md:py-20 lg:py-24 px-4 bg-white dark:bg-gray-900" id="about" data-section="about">
     <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
       <div class="text-center md:text-left">
-        <h2 class="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold mb-6">About Hance Land Service</h2>
-        <p class="customizable-text mb-6">We're not just building pads and ponds; we're shaping landscapes with fun, energy, and a whole lot of expertise! For over 25 years, Hance Land Service has been the go-to for farmers, ranchers, land developers, and proud property owners who demand dependability, affordability, and honest quality work.</p>
-        <p class="customizable-text">Our mission is simple: to make your land dreams a reality with a smile and a whole lot of dirt-moving power. We're dependable, affordable, and always deliver honest quality. Let's tackle your next project together!</p>
+        <h2 class="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold mb-6">{{ about.title }}</h2>
+        <div class="customizable-text mb-6">{{ about.text | safe }}</div>
         <div class="mt-10">
           <a href="#contact" class="customizable-btn customizable-btn-primary px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transition duration-300">Get a Free Quote</a>
         </div>
       </div>
       <div class="flex justify-center md:justify-end">
         <div class="customizable-image rounded-2xl shadow-xl max-w-md">
-          <img src="./assets/images/land-clearing/land-clearing-3.jpeg" alt="Hance Land Service Team" class="rounded-2xl">
+          <img src="{{ about.image }}" alt="Hance Land Service Team" class="rounded-2xl">
         </div>
       </div>
     </div>
@@ -302,7 +301,7 @@
         </a>
       </div>
       <p class="customizable-text-light text-base">
-        &copy; 2024 Hance Land Service. All rights reserved. | Building Dreams, One Acre at a Time.
+        &copy; 2024 {{ contact.businessName }}. All rights reserved. | Building Dreams, One Acre at a Time.
       </p>
       <p class="customizable-text-light text-sm mt-2">
         Licensed and Insured for your peace of mind.

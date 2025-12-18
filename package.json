@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Hance Land Service website with Decap CMS",
   "scripts": {
-    "start": "http-server -p 8080",
-    "dev": "http-server -p 8080 -o",
+    "build": "eleventy",
+    "start": "eleventy --serve",
+    "dev": "eleventy --serve --watch",
     "cms:proxy": "npx decap-server"
   },
   "keywords": [
@@ -14,6 +15,7 @@
   "author": "Hance Land Service",
   "license": "ISC",
   "devDependencies": {
+    "@11ty/eleventy": "^2.0.1",
     "http-server": "^14.1.1"
   }
 }

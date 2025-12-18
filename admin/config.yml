@@ -62,7 +62,9 @@ collections:
 
   - name: "portfolio"
     label: "Portfolio"
-    folder: "year}}-{{month}}-{{day}}-{{slug}}"
+    folder: "content/portfolio"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: "json"
     format: "json"
     fields:
@@ -71,6 +73,4 @@ collections:
       - { label: "Description", name: "description", widget: "text", required: false }
       - { label: "Images", name: "images", widget: "list", field: { label: "Image", name: "image", widget: "image" } }
       - { label: "Date", name: "date", widget: "datetime", default: "" }
-      - { label: "Featured", name: "featured", widget: "boolean", default: false, required: falseet: "text", required: false }
-      - { label: "Images", name: "images", widget: "list", field: { label: "Image", name: "image", widget: "image" } }
-      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false, required: false }
