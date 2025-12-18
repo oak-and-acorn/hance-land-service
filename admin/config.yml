@@ -3,6 +3,8 @@ backend:
   repo: oak-and-acorn/hance-land-service
   branch: main
 
+local_backend: true
+
 media_folder: "assets/images"
 public_folder: "/assets/images"
 
