@@ -2,34 +2,41 @@
 import Layout from '../layouts/Layout.astro';
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../keystatic.config';
+import Markdoc from '@markdoc/markdoc';
 
 const reader = createReader(process.cwd(), keystaticConfig);
 
 // Read singleton data
 const heroData = await reader.singletons.hero.read();
 const aboutData = await reader.singletons.about.read();
-const aboutContent = await aboutData?.text();
+const aboutNode = await aboutData?.text();
 const contactData = await reader.singletons.contact.read();
 
 // Read services
 const servicesEntries = await reader.collections.services.all();
 const services = await Promise.all(
-  servicesEntries.map(async (service) => ({
-    ...service.entry,
-    slug: service.slug,
-    description: await service.entry.description(),
-  }))
+  servicesEntries.map(async (service) => {
+    const descriptionNode = service.entry.description ? await service.entry.description() : null;
+    return {
+      ...service.entry,
+      slug: service.slug,
+      descriptionNode,
+    };
+  })
 );
 services.sort((a, b) => (a.order || 0) - (b.order || 0));
 
 // Read portfolio
 const portfolioEntries = await reader.collections.portfolio.all();
 const portfolio = await Promise.all(
-  portfolioEntries.map(async (project) => ({
-    ...project.entry,
-    slug: project.slug,
-    description: await project.entry.description(),
-  }))
+  portfolioEntries.map(async (project) => {
+    const descriptionNode = project.entry.description ? await project.entry.description() : null;
+    return {
+      ...project.entry,
+      slug: project.slug,
+      descriptionNode,
+    };
+  })
 );
 portfolio.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
 ---
@@ -62,7 +69,7 @@ portfolio.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0)
     <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
       <div class="text-center md:text-left">
         <h2 class="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold mb-6">{aboutData?.title}</h2>
-        <div class="customizable-text mb-6 prose dark:prose-invert" set:html={aboutContent}>
+        <div class="customizable-text mb-6 prose dark:prose-invert" set:html={aboutNode ? Markdoc.renderers.html(aboutNode) : ''}>
         </div>
         <div class="mt-10">
           <a href="#contact" class="customizable-btn customizable-btn-primary px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transition duration-300">Get a Free Quote</a>
@@ -89,8 +96,7 @@ portfolio.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0)
               </div>
             )}
             <h3 class="text-xl font-bold mb-4">{service.title}</h3>
-            <div class="text-gray-700 dark:text-gray-300">
-              {service.description}
+            <div class="text-gray-700 dark:text-gray-300 prose dark:prose-invert" set:html={service.descriptionNode ? Markdoc.renderers.html(service.descriptionNode) : ''}>
             </div>
           </div>
         ))}
@@ -113,7 +119,8 @@ portfolio.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0)
             <div class="p-6">
               <div class="text-sm text-blue-600 dark:text-blue-400 mb-2">{project.category}</div>
               <h3 class="text-xl font-bold mb-2">{project.title}</h3>
-              <p class="text-gray-700 dark:text-gray-300">{project.description}</p>
+              <div class="text-gray-700 dark:text-gray-300 prose dark:prose-invert" set:html={project.descriptionNode ? Markdoc.renderers.html(project.descriptionNode) : ''}>
+              </div>
             </div>
           </div>
         ))}
@@ -123,27 +130,68 @@ portfolio.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0)
 
   <!-- Contact Section -->
   <section class="customizable-section py-16 md:py-20 lg:py-24 px-4 bg-gray-100 dark:bg-gray-800" id="contact" data-section="contact">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold mb-6">Get in Touch</h2>
-      <p class="text-lg mb-8 text-gray-700 dark:text-gray-300">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold text-center mb-6">Get in Touch</h2>
+      <p class="text-lg mb-12 text-center text-gray-700 dark:text-gray-300">
         Ready to transform your land? Contact us today for a free consultation!
       </p>
+      
       <div class="grid md:grid-cols-2 gap-8 mb-12">
-        <div class="customizable-card p-8 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
-          <h3 class="text-xl font-bold mb-4">Call Us</h3>
-          <a href={`tel:${contactData.phone}`} class="text-2xl text-blue-600 dark:text-blue-400 hover:underline">
-            {contactData.phone}
-          </a>
+        <!-- Contact Info -->
+        <div class="space-y-6">
+          <div class="customizable-card p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+            <h3 class="text-xl font-bold mb-4">Call Us</h3>
+            <a href={`tel:${contactData?.phone}`} class="text-2xl text-blue-600 dark:text-blue-400 hover:underline">
+              {contactData?.phone}
+            </a>
+          </div>
+          
+          <div class="customizable-card p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+            <h3 class="text-xl font-bold mb-4">Email Us</h3>
+            <a href={`mailto:${contactData?.email}`} class="text-xl text-blue-600 dark:text-blue-400 hover:underline break-all">
+              {contactData?.email}
+            </a>
+          </div>
+          
+          <div class="customizable-card p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+            <h3 class="text-xl font-bold mb-4">Location</h3>
+            <p class="text-lg text-gray-700 dark:text-gray-300">{contactData?.address}</p>
+          </div>
         </div>
-        <div class="customizable-card p-8 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
-          <h3 class="text-xl font-bold mb-4">Email Us</h3>
-          <a href={`mailto:${contactData.email}`} class="text-xl text-blue-600 dark:text-blue-400 hover:underline break-all">
-            {contactData.email}
-          </a>
+        <!-- Contact Form -->
+        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
+          <h3 class="text-2xl font-bold mb-6">Send us a message</h3>
+          <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-4">
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="hidden">
+              <label>Don't fill this out: <input name="bot-field" /></label>
+            </p>
+            
+            <div>
+              <label for="name" class="block text-sm font-medium mb-2">Name *</label>
+              <input type="text" id="name" name="name" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" />
+            </div>
+            
+            <div>
+              <label for="email" class="block text-sm font-medium mb-2">Email *</label>
+              <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" />
+            </div>
+            
+            <div>
+              <label for="phone" class="block text-sm font-medium mb-2">Phone</label>
+              <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" />
+            </div>
+            
+            <div>
+              <label for="message" class="block text-sm font-medium mb-2">Message *</label>
+              <textarea id="message" name="message" required rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"></textarea>
+            </div>
+            
+            <button type="submit" class="w-full customizable-btn customizable-btn-primary px-6 py-3 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transition duration-300">
+              Send Message
+            </button>
+          </form>
         </div>
-      </div>
-      <div class="text-gray-600 dark:text-gray-400">
-        <p class="text-lg">{contactData.address}</p>
       </div>
     </div>
   </section>
