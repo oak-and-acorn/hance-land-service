@@ -14,8 +14,8 @@ export default config({
         subtitle: fields.text({ label: 'Hero Subtitle', multiline: true }),
         image: fields.image({
           label: 'Hero Image',
-          directory: 'public/assets/images',
-          publicPath: '/assets/images/',
+          directory: 'public/assets/images/hero',
+          publicPath: '/assets/images/hero/',
         }),
         ctaText: fields.text({ label: 'Call to Action Text' }),
       },
@@ -31,8 +31,8 @@ export default config({
         }),
         image: fields.image({
           label: 'About Image',
-          directory: 'public/assets/images',
-          publicPath: '/assets/images/',
+          directory: 'public/assets/images/about',
+          publicPath: '/assets/images/about/',
         }),
       },
     }),

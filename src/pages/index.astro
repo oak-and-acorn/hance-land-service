@@ -1,44 +1,39 @@
 ---
+
 import Layout from '../layouts/Layout.astro';
-import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from '../../keystatic.config';
-import Markdoc from '@markdoc/markdoc';
 
-const reader = createReader(process.cwd(), keystaticConfig);
+import Layout from '../layouts/Layout.astro';
+import { getCollection, getEntry, getEntryBySlug } from 'astro:content';
+// Remove direct Markdoc import; use .rendered.Content from Astro Content Collections
 
-// Read singleton data
-const heroData = await reader.singletons.hero.read();
-const aboutData = await reader.singletons.about.read();
-const aboutNode = await aboutData?.text();
-const contactData = await reader.singletons.contact.read();
+// Load hero, about, and contact from static JSON (or migrate to .mdoc if desired)
+import heroData from '../../content/hero.json';
+import aboutData from '../../content/about.json';
+import contactData from '../../content/contact.json';
 
-// Read services
-const servicesEntries = await reader.collections.services.all();
-const services = await Promise.all(
-  servicesEntries.map(async (service) => {
-    const descriptionNode = service.entry.description ? await service.entry.description() : null;
-    return {
-      ...service.entry,
-      slug: service.slug,
-      descriptionNode,
-    };
-  })
+import { render } from 'astro:content';
+
+// Load and render services
+let services = await getCollection('services');
+services = await Promise.all(
+  services
+    .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+    .map(async (entry) => ({
+      ...entry,
+      rendered: entry.body ? await render(entry) : null,
+    }))
 );
-services.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-// Read portfolio
-const portfolioEntries = await reader.collections.portfolio.all();
-const portfolio = await Promise.all(
-  portfolioEntries.map(async (project) => {
-    const descriptionNode = project.entry.description ? await project.entry.description() : null;
-    return {
-      ...project.entry,
-      slug: project.slug,
-      descriptionNode,
-    };
-  })
+// Load and render portfolio
+let portfolio = await getCollection('portfolio');
+portfolio = await Promise.all(
+  portfolio
+    .sort((a, b) => new Date(b.data.date || 0).getTime() - new Date(a.data.date || 0).getTime())
+    .map(async (entry) => ({
+      ...entry,
+      rendered: entry.body ? await render(entry) : null,
+    }))
 );
-portfolio.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
 ---
 
 <Layout title="Hance Land Service: Dependable Pond & Land Clearing Experts">
@@ -69,7 +64,8 @@ portfolio.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0)
     <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
       <div class="text-center md:text-left">
         <h2 class="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold mb-6">{aboutData?.title}</h2>
-        <div class="customizable-text mb-6 prose dark:prose-invert" set:html={aboutNode ? Markdoc.renderers.html(aboutNode) : ''}>
+        <div class="customizable-text mb-6 prose dark:prose-invert">
+          {aboutData?.text && <p>{aboutData.text}</p>}
         </div>
         <div class="mt-10">
           <a href="#contact" class="customizable-btn customizable-btn-primary px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transition duration-300">Get a Free Quote</a>
@@ -90,13 +86,16 @@ portfolio.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0)
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {services.map(service => (
           <div class="customizable-card p-6 shadow-lg bg-white dark:bg-gray-900 rounded-xl">
-            {service.image && (
+            {service.data.image && (
               <div class="customizable-image rounded-xl mb-6 overflow-hidden">
-                <img src={service.image} alt={service.title} class="w-full h-48 object-cover" />
+                <img src={service.data.image} alt={service.data.title} class="w-full h-48 object-cover" />
               </div>
             )}
-            <h3 class="text-xl font-bold mb-4">{service.title}</h3>
-            <div class="text-gray-700 dark:text-gray-300 prose dark:prose-invert" set:html={service.descriptionNode ? Markdoc.renderers.html(service.descriptionNode) : ''}>
+            <h3 class="text-xl font-bold mb-4">{service.data.title}</h3>
+            <div class="text-gray-700 dark:text-gray-300 prose dark:prose-invert">
+              {service.body ? (
+                service.rendered ? <service.rendered.Content /> : <em>Rendered content missing</em>
+              ) : <em>No description found</em>}
             </div>
           </div>
         ))}
@@ -111,15 +110,18 @@ portfolio.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0)
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {portfolio.map(project => (
           <div class="customizable-card overflow-hidden shadow-lg rounded-xl bg-white dark:bg-gray-800">
-            {project.images && project.images[0] && (
+            {project.data.images && project.data.images[0] && (
               <div class="customizable-image overflow-hidden">
-                <img src={project.images[0]} alt={project.title} class="w-full h-64 object-cover hover:scale-105 transition duration-300" />
+                <img src={project.data.images[0]} alt={project.data.title} class="w-full h-64 object-cover hover:scale-105 transition duration-300" />
               </div>
             )}
             <div class="p-6">
-              <div class="text-sm text-blue-600 dark:text-blue-400 mb-2">{project.category}</div>
-              <h3 class="text-xl font-bold mb-2">{project.title}</h3>
-              <div class="text-gray-700 dark:text-gray-300 prose dark:prose-invert" set:html={project.descriptionNode ? Markdoc.renderers.html(project.descriptionNode) : ''}>
+              <div class="text-sm text-blue-600 dark:text-blue-400 mb-2">{project.data.category}</div>
+              <h3 class="text-xl font-bold mb-2">{project.data.title}</h3>
+              <div class="text-gray-700 dark:text-gray-300 prose dark:prose-invert">
+                {project.body ? (
+                  project.rendered ? <project.rendered.Content /> : <em>Rendered content missing</em>
+                ) : <em>No description found</em>}
               </div>
             </div>
           </div>
