@@ -1,4 +1,4 @@
-// Custom preview templates for Decap CMS
+// This file is deprecated and can be deleted. Decap CMS is no longer used.
 
 // Register the site's CSS for preview styling
 CMS.registerPreviewStyle('/style.css');

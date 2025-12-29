@@ -101,7 +101,10 @@ export default config({
           }),
           {
             label: 'Images',
-            itemLabel: (props) => props.value || 'Image',
+            itemLabel: (props) =>
+              props.value && typeof props.value === 'object' && 'filename' in props.value
+                ? props.value.filename
+                : 'Image',
           }
         ),
         date: fields.datetime({ label: 'Date' }),

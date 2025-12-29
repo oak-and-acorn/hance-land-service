@@ -2,7 +2,7 @@ export default function HeroPreview({ entry }) {
   const h = window.React.createElement;
   const title = entry.getIn(['data', 'title']);
   const subtitle = entry.getIn(['data', 'subtitle']);
-  const image = entry.getIn(['data', 'image']);
+    // This file is deprecated and can be deleted. Decap CMS is no longer used.
   const ctaText = entry.getIn(['data', 'ctaText']);
 
   return h('div', {},

@@ -1,3 +1,5 @@
+// This file is deprecated and can be deleted. Decap CMS is no longer used.
+
 export default function ContactPreview({ entry }) {
   const h = window.React.createElement;
   const businessName = entry.getIn(['data', 'businessName']);
