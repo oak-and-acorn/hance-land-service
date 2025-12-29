@@ -12,6 +12,5 @@ export default function ServicePreview({ entry, widgetFor }) {
           href: '#contact',
           className: 'inline-block mt-4 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold'
         }, 'Learn More')
-      )
-    );
+      );
 }

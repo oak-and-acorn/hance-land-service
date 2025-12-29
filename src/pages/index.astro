@@ -1,8 +1,6 @@
 ---
 
 import Layout from '../layouts/Layout.astro';
-
-import Layout from '../layouts/Layout.astro';
 import { getCollection, getEntry, getEntryBySlug } from 'astro:content';
 // Remove direct Markdoc import; use .rendered.Content from Astro Content Collections
 
@@ -94,7 +92,7 @@ portfolio = await Promise.all(
             <h3 class="text-xl font-bold mb-4">{service.data.title}</h3>
             <div class="text-gray-700 dark:text-gray-300 prose dark:prose-invert">
               {service.body ? (
-                service.rendered ? <service.rendered.Content /> : <em>Rendered content missing</em>
+                service.rendered && service.rendered.Content ? <service.rendered.Content /> : <em>Rendered content missing</em>
               ) : <em>No description found</em>}
             </div>
           </div>
@@ -120,7 +118,7 @@ portfolio = await Promise.all(
               <h3 class="text-xl font-bold mb-2">{project.data.title}</h3>
               <div class="text-gray-700 dark:text-gray-300 prose dark:prose-invert">
                 {project.body ? (
-                  project.rendered ? <project.rendered.Content /> : <em>Rendered content missing</em>
+                  project.rendered && project.rendered.Content ? <project.rendered.Content /> : <em>Rendered content missing</em>
                 ) : <em>No description found</em>}
               </div>
             </div>
