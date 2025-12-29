@@ -12,9 +12,9 @@ import contactData from '../../content/contact.json';
 import { render } from 'astro:content';
 
 // Load and render services
-let services = await getCollection('services');
-services = await Promise.all(
-  services
+let servicesRaw = await getCollection('services');
+let servicesWithRendered = await Promise.all(
+  servicesRaw
     .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
     .map(async (entry) => ({
       ...entry,
@@ -23,9 +23,9 @@ services = await Promise.all(
 );
 
 // Load and render portfolio
-let portfolio = await getCollection('portfolio');
-portfolio = await Promise.all(
-  portfolio
+let portfolioRaw = await getCollection('portfolio');
+let portfolioWithRendered = await Promise.all(
+  portfolioRaw
     .sort((a, b) => new Date(b.data.date || 0).getTime() - new Date(a.data.date || 0).getTime())
     .map(async (entry) => ({
       ...entry,
@@ -82,7 +82,7 @@ portfolio = await Promise.all(
     <div class="max-w-6xl mx-auto">
       <h2 class="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold text-center mb-12">Our Services - Making Land Dreams Happen!</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        {services.map(service => (
+        {servicesWithRendered.map(service => (
           <div class="customizable-card p-6 shadow-lg bg-white dark:bg-gray-900 rounded-xl">
             {service.data.image && (
               <div class="customizable-image rounded-xl mb-6 overflow-hidden">
@@ -106,7 +106,7 @@ portfolio = await Promise.all(
     <div class="max-w-6xl mx-auto">
       <h2 class="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold text-center mb-12">Our Work Speaks for Itself</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {portfolio.map(project => (
+        {portfolioWithRendered.map(project => (
           <div class="customizable-card overflow-hidden shadow-lg rounded-xl bg-white dark:bg-gray-800">
             {project.data.images && project.data.images[0] && (
               <div class="customizable-image overflow-hidden">
