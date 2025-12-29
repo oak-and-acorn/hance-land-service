@@ -17,7 +17,9 @@
   "license": "ISC",
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
-    "http-server": "^14.1.1"
+    "@astrojs/check": "^0.9.6",
+    "http-server": "^14.1.1",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@astrojs/markdoc": "^0.15.10",
