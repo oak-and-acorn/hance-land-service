@@ -93,32 +93,18 @@
       <h2 class="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold text-center mb-12">Our Services - Making Land Dreams Happen!</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
         
+        {% for service in services %}
         <div class="customizable-card p-6 shadow-lg">
+          {% if service.image %}
           <div class="customizable-image rounded-xl mb-6">
-            <img src="./assets/images/ponds/ponds-1.jpeg" alt="Pond Construction">
+            <img src="{{ service.image }}" alt="{{ service.title }}">
           </div>
-          <h3 class="customizable-heading customizable-heading-sm text-2xl font-bold mb-3">Pond Building</h3>
-          <p class="customizable-text text-gray-600 dark:text-gray-300 mb-6">Dreaming of a serene pond for your ranch? We dig, shape, and construct beautiful, functional ponds that add value and beauty to your land. Get ready to make a splash!</p>
+          {% endif %}
+          <h3 class="customizable-heading customizable-heading-sm text-2xl font-bold mb-3">{{ service.title }}</h3>
+          <p class="customizable-text text-gray-600 dark:text-gray-300 mb-6">{{ service.description }}</p>
           <a href="#contact" class="customizable-btn customizable-btn-primary px-6 py-3 rounded-lg font-semibold inline-block">Learn More</a>
         </div>
-        
-        <div class="customizable-card p-6 shadow-lg">
-          <div class="customizable-image rounded-xl mb-6">
-            <img src="./assets/images/land-clearing/land-clearing-8.jpeg" alt="Land Clearing">
-          </div>
-          <h3 class="customizable-heading customizable-heading-sm text-2xl font-bold mb-3">Land Clearing</h3>
-          <p class="customizable-text text-gray-600 dark:text-gray-300 mb-6">Tired of overgrown lots? We efficiently clear trees, brush, and debris to prepare your land for building, farming, or simply enjoying the view. We clear the way for your next big project!</p>
-          <a href="#contact" class="customizable-btn customizable-btn-primary px-6 py-3 rounded-lg font-semibold inline-block">Learn More</a>
-        </div>
-        
-        <div class="customizable-card p-6 shadow-lg">
-          <div class="customizable-image rounded-xl mb-6">
-            <img src="./assets/images/mulching/mulching-4.jpeg" alt="Mulching">
-          </div>
-          <h3 class="customizable-heading customizable-heading-sm text-2xl font-bold mb-3">Mulching Services</h3>
-          <p class="customizable-text text-gray-600 dark:text-gray-300 mb-6">Turn unwanted brush into valuable mulch! Our mulching services quickly and affordably transform your land, enriching the soil and improving aesthetics. Let's get mulching!</p>
-          <a href="#contact" class="customizable-btn customizable-btn-primary px-6 py-3 rounded-lg font-semibold inline-block">Learn More</a>
-        </div>
+        {% endfor %}
 
       </div>
     </div>
@@ -129,65 +115,22 @@
       <h2 class="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold text-center mb-12">Our Awesome Work: A Visual Tour!</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         
+        {% for project in portfolio %}
         <div class="customizable-card">
+          {% if project.images and project.images.length > 0 %}
           <div class="customizable-image">
-            <img src="./assets/images/ponds/ponds-2.jpeg" alt="Completed Pond Project">
+            <img src="{{ project.images[0] }}" alt="{{ project.title }}">
           </div>
+          {% endif %}
           <div class="p-6">
-            <h3 class="customizable-heading customizable-heading-sm text-xl font-bold mb-2">Serene Ranch Pond</h3>
-            <p class="customizable-text text-gray-600 dark:text-gray-300">A beautiful, custom-built pond perfect for livestock and relaxation.</p>
+            <h3 class="customizable-heading customizable-heading-sm text-xl font-bold mb-2">{{ project.title }}</h3>
+            {% if project.category %}
+            <span class="text-sm text-gray-500 dark:text-gray-400">{{ project.category }}</span>
+            {% endif %}
+            <p class="customizable-text text-gray-600 dark:text-gray-300">{{ project.description }}</p>
           </div>
         </div>
-        
-        <div class="customizable-card">
-          <div class="customizable-image">
-            <img src="./assets/images/pads/pads-10.jpeg" alt="Cleared Land for Construction">
-          </div>
-          <div class="p-6">
-            <h3 class="customizable-heading customizable-heading-sm text-xl font-bold mb-2">Ready-to-Build Site</h3>
-            <p class="customizable-text text-gray-600 dark:text-gray-300">Cleared and prepped land, ideal for new construction projects.</p>
-          </div>
-        </div>
-        
-        <div class="customizable-card">
-          <div class="customizable-image">
-            <img src="./assets/images/mulching/mulching-6.jpeg" alt="Mulched Area">
-          </div>
-          <div class="p-6">
-            <h3 class="customizable-heading customizable-heading-sm text-xl font-bold mb-2">Enriched Mulched Land</h3>
-            <p class="customizable-text text-gray-600 dark:text-gray-300">Transforming brush into nutrient-rich mulch for land improvement.</p>
-          </div>
-        </div>
-        
-        <div class="customizable-card">
-          <div class="customizable-image">
-            <img src="./assets/images/land-clearing/land-clearing-4.jpeg" alt="Large Scale Land Clearing">
-          </div>
-          <div class="p-6">
-            <h3 class="customizable-heading customizable-heading-sm text-xl font-bold mb-2">Expansive Land Clearing</h3>
-            <p class="customizable-text text-gray-600 dark:text-gray-300">Handling large-scale clearing projects with efficiency and expertise.</p>
-          </div>
-        </div>
-        
-        <div class="customizable-card">
-          <div class="customizable-image">
-            <img src="./assets/images/ponds/ponds-12.jpeg" alt="Beautifully Shaped Pond">
-          </div>
-          <div class="p-6">
-            <h3 class="customizable-heading customizable-heading-sm text-xl font-bold mb-2">Recreational Pond</h3>
-            <p class="customizable-text text-gray-600 dark:text-gray-300">A stunning pond addition for recreational use on a private estate.</p>
-          </div>
-        </div>
-        
-        <div class="customizable-card">
-          <div class="customizable-image">
-            <img src="./assets/images/pads/pads-1.jpeg" alt="Prepared Site for Pad Building">
-          </div>
-          <div class="p-6">
-            <h3 class="customizable-heading customizable-heading-sm text-xl font-bold mb-2">Building Pad Preparation</h3>
-            <p class="customizable-text text-gray-600 dark:text-gray-300">Precisely leveled and cleared pad ready for building construction.</p>
-          </div>
-        </div>
+        {% endfor %}
 
       </div>
       <div class="text-center mt-12">

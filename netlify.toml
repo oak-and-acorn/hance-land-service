@@ -1,9 +1,9 @@
 [build]
   command = "npm run build"
-  publish = "_site"
+  publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
 
 [[redirects]]
   from = "/*"

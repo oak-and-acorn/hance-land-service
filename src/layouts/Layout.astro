@@ -1,0 +1,100 @@
+---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Hance Land Service offers dependable, affordable, and honest quality work for pond building, land clearing, and mulching. Contact us today for a free estimate!" } = Astro.props;
+
+// Read contact info
+const reader = createReader(process.cwd(), keystaticConfig);
+const contactData = await reader.singletons.contact.read();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/assets/images/logo-no-bg.png" />
+    <link rel="apple-touch-icon" href="/assets/images/logo-no-bg.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body class="font-body text-gray-900 dark:text-white">
+    <header class="customizable-header py-2 shadow-sm sticky top-0 z-50 w-full bg-white">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+        <div class="flex items-center">
+          <a href="#hero" class="text-2xl font-bold customizable-heading">
+            <img id="logo" src="/assets/images/logo-no-bg.png" alt="Hance Land Service Logo" class="h-32 w-auto" />
+          </a>
+        </div>
+        <div class="hidden md:flex space-x-6 items-center">
+          <a href="#hero" class="customizable-text-light hover:customizable-primary-text transition duration-200">Home</a>
+          <a href="#about" class="customizable-text-light hover:customizable-primary-text transition duration-200">About Us</a>
+          <a href="#services" class="customizable-text-light hover:customizable-primary-text transition duration-200">Services</a>
+          <a href="#portfolio" class="customizable-text-light hover:customizable-primary-text transition duration-200">Portfolio</a>
+          <a href="#contact" class="customizable-btn customizable-btn-primary px-5 py-2 rounded-lg font-semibold">Contact Us</a>
+        </div>
+        <div class="md:hidden">
+          <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md customizable-text-light hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+          </button>
+        </div>
+      </nav>
+      <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 shadow-lg">
+        <div class="px-4 pt-4 pb-3 space-y-2">
+          <a href="#hero" class="block customizable-text-light hover:customizable-primary-text px-2 py-2 rounded-md text-base font-medium">Home</a>
+          <a href="#about" class="block customizable-text-light hover:customizable-primary-text px-2 py-2 rounded-md text-base font-medium">About Us</a>
+          <a href="#services" class="block customizable-text-light hover:customizable-primary-text px-2 py-2 rounded-md text-base font-medium">Services</a>
+          <a href="#portfolio" class="block customizable-text-light hover:customizable-primary-text px-2 py-2 rounded-md text-base font-medium">Portfolio</a>
+          <a href="#contact" class="block customizable-btn customizable-btn-primary px-4 py-2 rounded-lg font-semibold mt-4">Contact Us</a>
+        </div>
+      </div>
+    </header>
+    
+    <slot />
+    
+    <footer class="customizable-footer py-12 px-4 bg-gray-900 text-white">
+      <div class="max-w-6xl mx-auto text-center">
+        <div class="mb-6">
+          <img src="/assets/images/logo/logo-no-bg.png" alt="Hance Land Service Logo" class="h-20 mx-auto mb-4" />
+          <p class="text-lg mb-4">{contactData?.businessName}</p>
+          <p class="mb-2">
+            <a href={`tel:${contactData?.phone}`} class="hover:text-blue-400 transition">
+              {contactData?.phone}
+            </a>
+          </p>
+          <p class="mb-2">
+            <a href={`mailto:${contactData?.email}`} class="hover:text-blue-400 transition">
+              {contactData?.email}
+            </a>
+          </p>
+          <p class="text-sm text-gray-400">{contactData?.address}</p>
+        </div>
+        <div class="border-t border-gray-700 pt-6">
+          <p class="text-sm text-gray-400">
+            &copy; {new Date().getFullYear()} {contactData?.businessName}. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+    
+    <style is:global>
+      @import '../styles/global.css';
+    </style>
+    
+    <script>
+      document.getElementById('mobile-menu-button')?.addEventListener('click', () => {
+        const menu = document.getElementById('mobile-menu');
+        menu?.classList.toggle('hidden');
+      });
+    </script>
+  </body>
+</html>
