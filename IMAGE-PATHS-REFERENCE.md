@@ -23,7 +23,7 @@ Use these paths when selecting images in Decap CMS. Copy and paste the path you 
 
 ## Logo
 - `./assets/images/logo/hance-land-service-logo.jpeg`
-- `./assets/images/logo/logo-no-bg.png`
+- `./assets/images/logo-no-bg.png`
 
 ## Mulching
 - `./assets/images/mulching/mulching-1.jpeg`
