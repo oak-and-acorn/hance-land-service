@@ -1,7 +1,7 @@
 {
   "name": "hance-land-service",
   "version": "1.0.0",
-  "description": "Hance Land Service website with Decap CMS",
+  "description": "Hance Land Service website with Keystatic CMS",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -16,7 +16,6 @@
   "author": "Hance Land Service",
   "license": "ISC",
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.1",
     "@astrojs/check": "^0.9.6",
     "http-server": "^14.1.1",
     "typescript": "^5.9.3"
