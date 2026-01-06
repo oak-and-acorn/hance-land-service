@@ -1,5 +1,5 @@
 import { draftMode } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -11,10 +11,11 @@ export async function GET(request: Request) {
   }
 
   // Enable draft mode
-  draftMode().enable()
+  const draft = await draftMode()
+  draft.enable()
 
-  // Store the branch information in a way that can be accessed by the reader
-  const response = redirect(to)
+  // Create redirect response with cookie
+  const response = NextResponse.redirect(new URL(to, request.url))
   
   // Set a cookie with the branch information
   response.cookies.set('keystatic-branch', branch, {
