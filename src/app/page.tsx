@@ -227,8 +227,7 @@ export default async function HomePage() {
             {/* Contact Form */}
             <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-bold mb-6">Send us a message</h3>
-              <form name="contact" method="POST" data-netlify="true" className="space-y-4">
-                <input type="hidden" name="form-name" value="contact" />
+              <form name="contact" method="POST" className="space-y-4">
                 
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">Name *</label>
