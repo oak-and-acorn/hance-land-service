@@ -1,12 +1,6 @@
 [build]
   command = "npm run build"
-  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20"
   NETLIFY_NEXT_SKEW_PROTECTION = "true"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
