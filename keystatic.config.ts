@@ -13,6 +13,7 @@ export default config({
     hero: singleton({
       label: 'Hero Section',
       path: 'src/content/hero/',
+      previewUrl: '/preview/start?branch={branch}&to=/',
       schema: {
         title: fields.text({ label: 'Hero Title' }),
         subtitle: fields.text({ label: 'Hero Subtitle', multiline: true }),
@@ -28,6 +29,7 @@ export default config({
     about: singleton({
       label: 'About Section',
       path: 'src/content/about/',
+      previewUrl: '/preview/start?branch={branch}&to=/#about',
       schema: {
         title: fields.text({ label: 'About Title' }),
         text: fields.markdoc({
@@ -44,6 +46,7 @@ export default config({
     contact: singleton({
       label: 'Contact Information',
       path: 'src/content/contact/',
+      previewUrl: '/preview/start?branch={branch}&to=/#contact',
       schema: {
         businessName: fields.text({ label: 'Business Name' }),
         phone: fields.text({ label: 'Phone' }),
@@ -58,6 +61,7 @@ export default config({
       label: 'Services',
       slugField: 'title',
       path: 'src/content/services/*/',
+      previewUrl: '/preview/start?branch={branch}&to=/#services',
       format: { contentField: 'description' },
       schema: {
         title: fields.slug({ name: { label: 'Service Name' } }),
@@ -78,6 +82,7 @@ export default config({
       label: 'Portfolio',
       slugField: 'title',
       path: 'src/content/portfolio/*/',
+      previewUrl: '/preview/start?branch={branch}&to=/#portfolio',
       format: { contentField: 'description' },
       schema: {
         title: fields.slug({ name: { label: 'Project Name' } }),

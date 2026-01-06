@@ -1,9 +1,10 @@
 [build]
   command = "npm run build"
-  publish = "dist"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20"
+  NETLIFY_NEXT_SKEW_PROTECTION = "true"
 
 [[redirects]]
   from = "/*"
