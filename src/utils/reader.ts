@@ -36,7 +36,8 @@ export const getReader = cache(async () => {
       return githubReader
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
-        console.log('GitHub reader failed, falling back to local:', error.message)
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+        console.log('GitHub reader failed, falling back to local:', errorMessage)
       }
       
       // Fall back to local reader
@@ -52,7 +53,8 @@ export const getReader = cache(async () => {
         ref: 'main',
       })
     } catch (error) {
-      console.error('GitHub reader failed in production, using local fallback:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      console.error('GitHub reader failed in production, using local fallback:', errorMessage)
       return createReader(process.cwd(), keystaticConfig)
     }
   }
