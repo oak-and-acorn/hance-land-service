@@ -18,8 +18,8 @@ export const getReader = cache(async () => {
   }
   
   if (isEnabled) {
-    // In draft mode, try GitHub reader first, fall back to local if it fails
-    const targetBranch = branch || 'main'
+    // In draft mode, read from the specified branch or default to preview
+    const targetBranch = branch || 'content/preview'
     
     try {
       if (process.env.NODE_ENV === 'development') {
@@ -31,8 +31,6 @@ export const getReader = cache(async () => {
         ref: targetBranch,
       })
       
-      // Test if the reader works by trying to read something small
-      // If this fails, it will throw and we'll fall back to local
       return githubReader
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
@@ -45,7 +43,7 @@ export const getReader = cache(async () => {
     }
   }
   
-  // Use GitHub reader for production, local for development when not in preview
+  // For non-preview mode, always read from main branch
   if (process.env.NODE_ENV === 'production') {
     try {
       return createGitHubReader(keystaticConfig, {
