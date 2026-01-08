@@ -1,17 +1,31 @@
 import { draftMode } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { redirect } from 'next/navigation'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const to = searchParams.get('to') || '/'
 
-  // Disable draft mode
-  const draft = await draftMode()
-  draft.disable()
+  console.log('Preview end, redirecting to:', to)
 
-  // Create redirect response and clear cookie
-  const response = NextResponse.redirect(new URL(to, request.url))
-  response.cookies.delete('keystatic-branch')
+  try {
+    // Disable draft mode
+    const draft = await draftMode()
+    draft.disable()
+    console.log('Draft mode disabled')
 
-  return response
+    // Create redirect response and clear cookie
+    const response = new Response(null, {
+      status: 307,
+      headers: {
+        'Location': to,
+        'Set-Cookie': 'keystatic-branch=; Path=/; HttpOnly; Max-Age=0'
+      }
+    })
+
+    console.log('Preview ended successfully')
+    return response
+  } catch (error) {
+    console.error('Preview end error:', error)
+    return new Response('Internal Server Error', { status: 500 })
+  }
 }
