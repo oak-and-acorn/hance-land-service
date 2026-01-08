@@ -20,9 +20,10 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   
   // Only use preview mode if the URL has preview parameters
   const isPreviewRequest = !!(params.branch && params.to)
+  const branchName = typeof params.branch === 'string' ? params.branch : undefined
   
   // Use the draft-aware reader
-  const reader = await getReader(isPreviewRequest)
+  const reader = await getReader(isPreviewRequest, branchName)
   
   // Read content from Keystatic
   const [heroData, aboutData, contactData, servicesRaw, portfolioRaw] = await Promise.all([
@@ -33,6 +34,29 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
     reader.collections.portfolio.all()
   ])
 
+  // Transform image URLs for preview mode
+  const transformImageUrl = (imageUrl: string | null | undefined) => {
+    if (!imageUrl || !isPreviewRequest) return imageUrl
+    
+    // If it's a local asset path, proxy it through GitHub
+    if (imageUrl.startsWith('/assets/')) {
+      return `/api/image-proxy?path=public${imageUrl}&branch=${branchName}`
+    }
+    
+    return imageUrl
+  }
+
+  // Apply image transformations for preview
+  const processedHeroData = heroData ? {
+    ...heroData,
+    image: transformImageUrl(heroData.image)
+  } : null
+
+  const processedAboutData = aboutData ? {
+    ...aboutData,
+    image: transformImageUrl(aboutData.image)
+  } : null
+
   // Debug information (only in development)
   if (process.env.NODE_ENV === 'development') {
     const { cookies } = await import('next/headers')
@@ -40,15 +64,21 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
     const branch = cookieStore.get('keystatic-branch')?.value
     const draftCookie = cookieStore.get('__prerender_bypass')?.value
     
+    // Get all cookies for debugging
+    const allCookies = cookieStore.getAll()
+    
     console.log('=== PREVIEW DEBUG ===')
     console.log('Preview mode enabled:', isEnabled)
     console.log('Is preview request (has branch & to params):', isPreviewRequest)
     console.log('URL params:', params)
     console.log('Draft cookie (__prerender_bypass):', draftCookie ? 'Present' : 'Missing')
     console.log('Branch cookie:', branch || 'Not set')
+    console.log('All cookies:', allCookies.map(c => `${c.name}=${c.value}`).join(', '))
     console.log('Reader type:', reader.constructor.name)
-    console.log('Hero image URL:', heroData?.image)
-    console.log('About image URL:', aboutData?.image)
+    console.log('Hero image URL (original):', heroData?.image)
+    console.log('Hero image URL (processed):', processedHeroData?.image)
+    console.log('About image URL (original):', aboutData?.image)
+    console.log('About image URL (processed):', processedAboutData?.image)
     console.log('====================')
   }
 
@@ -85,8 +115,8 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
   // Render about text
   let renderedAboutText = null
-  if (aboutData?.text) {
-    const { node } = await aboutData.text()
+  if (processedAboutData?.text) {
+    const { node } = await processedAboutData.text()
     const renderable = Markdoc.transform(node)
     renderedAboutText = Markdoc.renderers.react(renderable, React)
   }
@@ -99,6 +129,33 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
   return (
     <div>
+      {/* Manual draft mode banner for preview */}
+      {isPreviewRequest && (
+        <div style={{
+          background: '#f59e0b',
+          color: 'white',
+          padding: '8px 16px',
+          textAlign: 'center',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          position: 'sticky',
+          top: 0,
+          zIndex: 9999
+        }}>
+          🔍 Preview Mode Active (Branch: {branchName}) 
+          <a 
+            href="/preview/end" 
+            style={{ 
+              color: 'white', 
+              marginLeft: '16px', 
+              textDecoration: 'underline' 
+            }}
+          >
+            Exit Preview
+          </a>
+        </div>
+      )}
+      
       {/* Header */}
       <header className="customizable-header py-2 shadow-sm sticky top-0 z-50 w-full bg-white">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
@@ -127,19 +184,19 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       {/* Hero Section */}
       <section className="customizable-section py-16 md:py-24 lg:py-32 px-4 customizable-primary-bg relative overflow-hidden" id="hero">
         <div className="absolute inset-0">
-          <img src={heroData?.image || ''} alt="Hance Land Service Hero Image" className="w-full h-full object-cover opacity-30" />
+          <img src={processedHeroData?.image || ''} alt="Hance Land Service Hero Image" className="w-full h-full object-cover opacity-30" />
         </div>
         <div className="relative z-10 max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between">
           <div className="text-center lg:text-left lg:w-1/2 lg:pr-16 mb-10 lg:mb-0">
             <h1 className="customizable-heading customizable-heading-lg text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
-              {heroData?.title || 'Hance Land Service'}
+              {processedHeroData?.title || 'Hance Land Service'}
             </h1>
             <p className="customizable-text text-lg lg:text-xl mb-8 text-white">
-              {heroData?.subtitle || 'Professional land clearing and pond building services'}
+              {processedHeroData?.subtitle || 'Professional land clearing and pond building services'}
             </p>
             <div className="flex justify-center lg:justify-start">
               <a href="#contact" className="customizable-btn customizable-btn-primary px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transition duration-300">
-                {heroData?.ctaText || 'Get Started'}
+                {processedHeroData?.ctaText || 'Get Started'}
               </a>
             </div>
           </div>
@@ -151,7 +208,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div className="text-center md:text-left">
             <h2 className="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold mb-6">
-              {aboutData?.title || 'About Us'}
+              {processedAboutData?.title || 'About Us'}
             </h2>
             <div className="customizable-text mb-6 prose dark:prose-invert">
               {renderedAboutText}
@@ -164,7 +221,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           </div>
           <div className="flex justify-center md:justify-end">
             <div className="customizable-image rounded-2xl shadow-xl max-w-md">
-              <img src={aboutData?.image || ''} alt="Hance Land Service Team" className="rounded-2xl" />
+              <img src={processedAboutData?.image || ''} alt="Hance Land Service Team" className="rounded-2xl" />
             </div>
           </div>
         </div>

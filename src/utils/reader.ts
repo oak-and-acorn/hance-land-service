@@ -5,32 +5,31 @@ import { draftMode } from 'next/headers'
 import { cookies } from 'next/headers'
 import { cache } from 'react'
 
-export const getReader = cache(async (forcePreview?: boolean) => {
+export const getReader = cache(async (forcePreview?: boolean, targetBranch?: string) => {
   const { isEnabled } = await draftMode()
-  const cookieStore = await cookies()
-  const branch = cookieStore.get('keystatic-branch')?.value
   
   if (process.env.NODE_ENV === 'development') {
     console.log('=== READER DEBUG ===')
     console.log('Draft mode in reader:', isEnabled)
-    console.log('Branch from cookie:', branch)
+    console.log('Target branch:', targetBranch)
     console.log('Force preview:', forcePreview)
     console.log('==================')
   }
   
-  // Only use preview mode if explicitly forced (when preview URL parameters are present)
-  if (isEnabled && forcePreview) {
-    // In draft mode, read from the specified branch or default to preview
-    const targetBranch = branch || 'preview'
+  // Use preview mode when explicitly forced (when preview URL parameters are present)
+  // OR when draft mode is enabled
+  if (forcePreview || isEnabled) {
+    // In preview mode, read from the specified branch or default to preview
+    const branchToUse = targetBranch || 'preview'
     
     try {
       if (process.env.NODE_ENV === 'development') {
-        console.log('Attempting GitHub reader for preview branch:', targetBranch)
+        console.log('Attempting GitHub reader for preview branch:', branchToUse)
       }
       
       const githubReader = createGitHubReader(keystaticConfig, {
         repo: 'oak-and-acorn/hance-land-service',
-        ref: targetBranch,
+        ref: branchToUse,
       })
       
       return githubReader
