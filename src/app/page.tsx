@@ -1,6 +1,10 @@
 import { getReader } from '../utils/reader'
 import Markdoc from '@markdoc/markdoc'
 import React from 'react'
+import { draftMode } from 'next/headers'
+
+// Disable static generation for preview mode
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata() {
   return {
@@ -10,8 +14,26 @@ export async function generateMetadata() {
 }
 
 export default async function HomePage() {
+  // Check if we're in draft mode
+  const { isEnabled } = await draftMode()
+  
   // Use the draft-aware reader
   const reader = await getReader()
+  
+  // Debug information (only in development)
+  if (process.env.NODE_ENV === 'development') {
+    const { cookies } = await import('next/headers')
+    const cookieStore = await cookies()
+    const branch = cookieStore.get('keystatic-branch')?.value
+    const draftCookie = cookieStore.get('__prerender_bypass')?.value
+    
+    console.log('=== PREVIEW DEBUG ===')
+    console.log('Preview mode enabled:', isEnabled)
+    console.log('Draft cookie (__prerender_bypass):', draftCookie ? 'Present' : 'Missing')
+    console.log('Branch cookie:', branch || 'Not set')
+    console.log('Reader type:', reader.constructor.name)
+    console.log('====================')
+  }
   
   // Read content from Keystatic
   const [heroData, aboutData, contactData, servicesRaw, portfolioRaw] = await Promise.all([
