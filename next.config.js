@@ -2,8 +2,6 @@
 const nextConfig = {
   images: {
     domains: [],
-    // Allow local images to be optimized
-    unoptimized: false,
   },
   // Enable experimental features for better preview support
   experimental: {
