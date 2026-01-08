@@ -1,7 +1,11 @@
-import KeystaticApp from \"./keystatic\";\nimport { PublishButton } from \"../../components/PublishButton\";
+import KeystaticApp from "./keystatic";
+import { PublishButton } from "../../components/PublishButton";
 
 export default function Layout() {
   return (
-    <>\n      <KeystaticApp />\n      <PublishButton />\n    </>
+    <>
+      <KeystaticApp />
+      <PublishButton />
+    </>
   );
 }
