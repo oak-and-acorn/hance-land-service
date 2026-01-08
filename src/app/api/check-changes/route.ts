@@ -13,7 +13,7 @@ export async function GET() {
     const owner = 'oak-and-acorn'
     const repo = 'hance-land-service'
     const baseBranch = 'main'
-    const headBranch = 'content/preview'
+    const headBranch = 'preview'
     
     console.log(`Checking for changes between ${baseBranch} and ${headBranch}`)
     

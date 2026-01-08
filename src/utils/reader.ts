@@ -5,7 +5,7 @@ import { draftMode } from 'next/headers'
 import { cookies } from 'next/headers'
 import { cache } from 'react'
 
-export const getReader = cache(async () => {
+export const getReader = cache(async (forcePreview?: boolean) => {
   const { isEnabled } = await draftMode()
   const cookieStore = await cookies()
   const branch = cookieStore.get('keystatic-branch')?.value
@@ -14,12 +14,14 @@ export const getReader = cache(async () => {
     console.log('=== READER DEBUG ===')
     console.log('Draft mode in reader:', isEnabled)
     console.log('Branch from cookie:', branch)
+    console.log('Force preview:', forcePreview)
     console.log('==================')
   }
   
-  if (isEnabled) {
+  // Only use preview mode if explicitly forced (when preview URL parameters are present)
+  if (isEnabled && forcePreview) {
     // In draft mode, read from the specified branch or default to preview
-    const targetBranch = branch || 'content/preview'
+    const targetBranch = branch || 'preview'
     
     try {
       if (process.env.NODE_ENV === 'development') {

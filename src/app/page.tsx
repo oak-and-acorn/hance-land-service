@@ -13,27 +13,16 @@ export async function generateMetadata() {
   }
 }
 
-export default async function HomePage() {
+export default async function HomePage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   // Check if we're in draft mode
   const { isEnabled } = await draftMode()
+  const params = await searchParams
+  
+  // Only use preview mode if the URL has preview parameters
+  const isPreviewRequest = !!(params.branch && params.to)
   
   // Use the draft-aware reader
-  const reader = await getReader()
-  
-  // Debug information (only in development)
-  if (process.env.NODE_ENV === 'development') {
-    const { cookies } = await import('next/headers')
-    const cookieStore = await cookies()
-    const branch = cookieStore.get('keystatic-branch')?.value
-    const draftCookie = cookieStore.get('__prerender_bypass')?.value
-    
-    console.log('=== PREVIEW DEBUG ===')
-    console.log('Preview mode enabled:', isEnabled)
-    console.log('Draft cookie (__prerender_bypass):', draftCookie ? 'Present' : 'Missing')
-    console.log('Branch cookie:', branch || 'Not set')
-    console.log('Reader type:', reader.constructor.name)
-    console.log('====================')
-  }
+  const reader = await getReader(isPreviewRequest)
   
   // Read content from Keystatic
   const [heroData, aboutData, contactData, servicesRaw, portfolioRaw] = await Promise.all([
@@ -43,6 +32,25 @@ export default async function HomePage() {
     reader.collections.services.all(),
     reader.collections.portfolio.all()
   ])
+
+  // Debug information (only in development)
+  if (process.env.NODE_ENV === 'development') {
+    const { cookies } = await import('next/headers')
+    const cookieStore = await cookies()
+    const branch = cookieStore.get('keystatic-branch')?.value
+    const draftCookie = cookieStore.get('__prerender_bypass')?.value
+    
+    console.log('=== PREVIEW DEBUG ===')
+    console.log('Preview mode enabled:', isEnabled)
+    console.log('Is preview request (has branch & to params):', isPreviewRequest)
+    console.log('URL params:', params)
+    console.log('Draft cookie (__prerender_bypass):', draftCookie ? 'Present' : 'Missing')
+    console.log('Branch cookie:', branch || 'Not set')
+    console.log('Reader type:', reader.constructor.name)
+    console.log('Hero image URL:', heroData?.image)
+    console.log('About image URL:', aboutData?.image)
+    console.log('====================')
+  }
 
   // Render Markdoc content to React components
   const servicesData = await Promise.all(

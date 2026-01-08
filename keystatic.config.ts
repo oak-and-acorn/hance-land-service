@@ -3,7 +3,6 @@ import { config, fields, collection, singleton } from '@keystatic/core';
 export default config({
   storage: {
     kind: 'cloud',
-    branchPrefix: 'content/',
   },
 
   cloud: {

@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     const owner = 'oak-and-acorn'
     const repo = 'hance-land-service'
     const baseBranch = 'main'
-    const headBranch = 'content/preview'
+    const headBranch = 'preview'
     
     // Create a merge request from preview to main
     const response = await fetch(
