@@ -2,6 +2,7 @@ import { getReader } from '../utils/reader'
 import Markdoc from '@markdoc/markdoc'
 import React from 'react'
 import { draftMode } from 'next/headers'
+import PortfolioCarousel from '../components/PortfolioCarousel'
 
 // Disable static generation for preview mode
 export const dynamic = 'force-dynamic'
@@ -274,9 +275,12 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {sortedPortfolio.map(project => (
               <div key={project.slug} className="customizable-card overflow-hidden shadow-lg rounded-xl bg-white dark:bg-gray-800">
-                {project.entry.images && project.entry.images[0] && (
+                {project.entry.images && project.entry.images.length > 0 && (
                   <div className="customizable-image overflow-hidden">
-                    <img src={project.entry.images[0]} alt={project.entry.title} className="w-full h-64 object-cover hover:scale-105 transition duration-300" />
+                    <PortfolioCarousel 
+                      images={project.entry.images.filter((img): img is string => img != null)} 
+                      title={project.entry.title} 
+                    />
                   </div>
                 )}
                 <div className="p-6">
