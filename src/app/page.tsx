@@ -38,11 +38,17 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   const transformImageUrl = (imageUrl: string | null | undefined) => {
     if (!imageUrl || !isPreviewRequest) return imageUrl
     
-    // If it's a local asset path, proxy it through GitHub
+    // For preview mode, route images through Keystatic's API to avoid GitHub CDN delays
+    // Keystatic may have more immediate access to uploaded files
     if (imageUrl.startsWith('/assets/')) {
-      return `/api/image-proxy?path=public${imageUrl}&branch=${branchName}`
+      const timestamp = Date.now()
+      // Try routing through Keystatic API instead of GitHub raw URLs
+      const keystaticProxyUrl = `/api/keystatic/image-proxy?src=${encodeURIComponent(imageUrl)}&branch=${branchName}&t=${timestamp}`
+      console.log('Using Keystatic image proxy:', imageUrl, '->', keystaticProxyUrl)
+      return keystaticProxyUrl
     }
     
+    console.log('Image URL not transformed (not an asset path):', imageUrl)
     return imageUrl
   }
 
@@ -93,6 +99,10 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       }
       return {
         ...service,
+        entry: {
+          ...service.entry,
+          image: transformImageUrl(service.entry.image)
+        },
         renderedDescription
       }
     })
@@ -108,6 +118,10 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       }
       return {
         ...project,
+        entry: {
+          ...project.entry,
+          images: project.entry.images?.map(image => transformImageUrl(image))
+        },
         renderedDescription
       }
     })
