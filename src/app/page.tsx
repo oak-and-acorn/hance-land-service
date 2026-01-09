@@ -2,6 +2,7 @@ import { getReader } from '../utils/reader'
 import Markdoc from '@markdoc/markdoc'
 import React from 'react'
 import { draftMode } from 'next/headers'
+import PortfolioCarousel from '../components/PortfolioCarousel'
 
 // Disable static generation for preview mode
 export const dynamic = 'force-dynamic'
@@ -38,11 +39,17 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   const transformImageUrl = (imageUrl: string | null | undefined) => {
     if (!imageUrl || !isPreviewRequest) return imageUrl
     
-    // If it's a local asset path, proxy it through GitHub
+    // For preview mode, route images through Keystatic's API to avoid GitHub CDN delays
+    // Keystatic may have more immediate access to uploaded files
     if (imageUrl.startsWith('/assets/')) {
-      return `/api/image-proxy?path=public${imageUrl}&branch=${branchName}`
+      const timestamp = Date.now()
+      // Try routing through Keystatic API instead of GitHub raw URLs
+      const keystaticProxyUrl = `/api/keystatic/image-proxy?src=${encodeURIComponent(imageUrl)}&branch=${branchName}&t=${timestamp}`
+      console.log('Using Keystatic image proxy:', imageUrl, '->', keystaticProxyUrl)
+      return keystaticProxyUrl
     }
     
+    console.log('Image URL not transformed (not an asset path):', imageUrl)
     return imageUrl
   }
 
@@ -93,6 +100,10 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       }
       return {
         ...service,
+        entry: {
+          ...service.entry,
+          image: transformImageUrl(service.entry.image)
+        },
         renderedDescription
       }
     })
@@ -108,6 +119,10 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       }
       return {
         ...project,
+        entry: {
+          ...project.entry,
+          images: project.entry.images?.map(image => transformImageUrl(image))
+        },
         renderedDescription
       }
     })
@@ -260,9 +275,12 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {sortedPortfolio.map(project => (
               <div key={project.slug} className="customizable-card overflow-hidden shadow-lg rounded-xl bg-white dark:bg-gray-800">
-                {project.entry.images && project.entry.images[0] && (
+                {project.entry.images && project.entry.images.length > 0 && (
                   <div className="customizable-image overflow-hidden">
-                    <img src={project.entry.images[0]} alt={project.entry.title} className="w-full h-64 object-cover hover:scale-105 transition duration-300" />
+                    <PortfolioCarousel 
+                      images={project.entry.images.filter((img): img is string => img != null)} 
+                      title={project.entry.title} 
+                    />
                   </div>
                 )}
                 <div className="p-6">
