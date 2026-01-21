@@ -138,6 +138,20 @@ body {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
+/* Contact section card height fix */
+@media (min-width: 1024px) {
+  .contact-card-equal-height {
+    height: 50% !important;
+  }
+}
+
+/* Footer list styling */
+footer ul {
+  list-style-type: none !important;
+  padding-left: 0 !important;
+}
+
+
 .customizable-image {
   border-radius: var(--current-card-radius);
   overflow: hidden;
