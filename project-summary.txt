@@ -78,8 +78,7 @@ RAW WEBSITE DATA (JSON):
     "cta": "contact us today",
     "hasLogo": "Yes, I have a logo",
     "socialMediaPlatforms": [
-      "facebook",
-      "tiktok"
+      "facebook"
     ],
     "domain": "",
     "additionalInfo": "",

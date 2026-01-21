@@ -53,6 +53,27 @@ export default config({
         phone: fields.text({ label: 'Phone' }),
         email: fields.text({ label: 'Email' }),
         address: fields.text({ label: 'Address', multiline: true }),
+        socialMedia: fields.array(
+          fields.object({
+            platform: fields.select({
+              label: 'Platform',
+              options: [
+                { label: 'Facebook', value: 'facebook' },
+                { label: 'Instagram', value: 'instagram' },
+                { label: 'Twitter/X', value: 'twitter' },
+                { label: 'LinkedIn', value: 'linkedin' },
+                { label: 'YouTube', value: 'youtube' },
+                { label: 'TikTok', value: 'tiktok' },
+              ],
+              defaultValue: 'facebook',
+            }),
+            url: fields.url({ label: 'Profile URL' }),
+          }),
+          {
+            label: 'Social Media Links',
+            itemLabel: (props) => props.fields.platform.value || 'Social Media Link',
+          }
+        ),
       },
     }),
   },

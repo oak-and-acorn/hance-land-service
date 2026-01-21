@@ -3,6 +3,7 @@ import Markdoc from '@markdoc/markdoc'
 import React from 'react'
 import { draftMode } from 'next/headers'
 import PortfolioCarousel from '../components/PortfolioCarousel'
+import SocialMediaIcon from '../components/SocialMediaIcon'
 
 // Disable static generation for preview mode
 export const dynamic = 'force-dynamic'
@@ -327,6 +328,23 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                 <h3 className="text-xl font-bold mb-4">Location</h3>
                 <p className="text-lg text-gray-700 dark:text-gray-300">{contactData?.address}</p>
               </div>
+              
+              {/* Social Media Links */}
+              {contactData?.socialMedia && contactData.socialMedia.length > 0 && (
+                <div className="customizable-card p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+                  <h3 className="text-xl font-bold mb-4">Follow Us</h3>
+                  <div className="flex gap-4">
+                    {contactData.socialMedia.map((social, index) => (
+                      <SocialMediaIcon 
+                        key={index} 
+                        platform={social.platform} 
+                        url={social.url}
+                        className="w-8 h-8"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             
             {/* Contact Form */}
@@ -407,6 +425,21 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
             </p>
             <p className="text-sm text-gray-400">{contactData?.address}</p>
           </div>
+          
+          {/* Social Media Links */}
+          {contactData?.socialMedia && contactData.socialMedia.length > 0 && (
+            <div className="flex justify-center gap-6 py-6">
+              {contactData.socialMedia.map((social, index) => (
+                <SocialMediaIcon 
+                  key={index} 
+                  platform={social.platform} 
+                  url={social.url}
+                  className="w-8 h-8"
+                />
+              ))}
+            </div>
+          )}
+          
           <div className="border-t border-gray-700 pt-6">
             <p className="text-sm text-gray-400">
               &copy; {new Date().getFullYear()} {contactData?.businessName}. All rights reserved.
