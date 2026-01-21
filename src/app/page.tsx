@@ -299,7 +299,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
       {/* Contact Section */}
       <section className="customizable-section py-16 md:py-20 lg:py-24 px-4 bg-gray-100 dark:bg-gray-800" id="contact">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <h2 className="customizable-heading customizable-heading-md text-3xl md:text-4xl font-bold text-center mb-6">
             Get in Touch
           </h2>
@@ -307,50 +307,57 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
             Ready to transform your land? Contact us today for a free consultation!
           </p>
           
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Contact Info */}
-            <div className="space-y-6">
-              <div className="customizable-card p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
-                <h3 className="text-xl font-bold mb-4">Call Us</h3>
-                <a href={`tel:${contactData?.phone}`} className="text-2xl text-blue-600 dark:text-blue-400 hover:underline">
-                  {contactData?.phone}
-                </a>
-              </div>
-              
-              <div className="customizable-card p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
-                <h3 className="text-xl font-bold mb-4">Email Us</h3>
-                <a href={`mailto:${contactData?.email}`} className="text-xl text-blue-600 dark:text-blue-400 hover:underline break-all">
-                  {contactData?.email}
-                </a>
-              </div>
-              
-              <div className="customizable-card p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
-                <h3 className="text-xl font-bold mb-4">Location</h3>
-                <p className="text-lg text-gray-700 dark:text-gray-300">{contactData?.address}</p>
-              </div>
-              
-              {/* Social Media Links */}
-              {contactData?.socialMedia && contactData.socialMedia.length > 0 && (
-                <div className="customizable-card p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
-                  <h3 className="text-xl font-bold mb-4">Follow Us</h3>
-                  <div className="flex gap-4">
-                    {contactData.socialMedia.map((social, index) => (
-                      <SocialMediaIcon 
-                        key={index} 
-                        platform={social.platform} 
-                        url={social.url}
-                        className="w-8 h-8"
-                      />
-                    ))}
-                  </div>
+          <div className="flex flex-col lg:flex-row gap-8 lg:items-stretch">
+            {/* Contact Cards - Stacked on left */}
+            <div className="flex flex-col gap-6 lg:w-80 lg:flex-shrink-0 lg:h-full">
+              <div className="customizable-card contact-card-equal-height p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+                <div className="mb-6">
+                  <h3 className="text-lg font-bold mb-3">Call Us</h3>
+                  <a href={`tel:${contactData?.phone}`} className="text-xl text-blue-600 dark:text-blue-400 hover:underline">
+                    {contactData?.phone}
+                  </a>
                 </div>
-              )}
+                <div>
+                  <h3 className="text-lg font-bold mb-3">Email Us</h3>
+                  <a href={`mailto:${contactData?.email}`} className="text-lg text-blue-600 dark:text-blue-400 hover:underline break-all">
+                    {contactData?.email}
+                  </a>
+                </div>
+              </div>
+              
+              <div className="customizable-card contact-card-equal-height p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+                <h3 className="text-lg font-bold mb-3">Location</h3>
+                <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">{contactData?.address}</p>
+                
+                {/* Social Media */}
+                {contactData?.socialMedia && contactData.socialMedia.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <p className="text-sm font-semibold mb-2">Follow Us</p>
+                    <div className="flex gap-3">
+                      {contactData.socialMedia.map((social, index) => (
+                        <SocialMediaIcon 
+                          key={index} 
+                          platform={social.platform} 
+                          url={social.url}
+                          className="text-4xl"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             
-            {/* Contact Form */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
+            {/* Contact Form - Takes remaining width */}
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 w-full lg:w-auto lg:flex-1">
               <h3 className="text-2xl font-bold mb-6">Send us a message</h3>
-              <form name="contact" method="POST" className="space-y-4">
+              <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" className="space-y-4">
+                <input type="hidden" name="form-name" value="contact" />
+                <p className="hidden">
+                  <label>
+                    Don't fill this out if you're human: <input name="bot-field" />
+                  </label>
+                </p>
                 
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">Name *</label>
@@ -404,43 +411,78 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
               </form>
             </div>
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
 
       {/* Footer */}
-      <footer className="customizable-footer py-12 px-4 bg-gray-900 text-white">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="mb-6">
-            <img src="/assets/images/logo-no-bg.png" alt="Hance Land Service Logo" className="h-20 mx-auto mb-4" />
-            <p className="text-lg mb-4">{contactData?.businessName}</p>
-            <p className="mb-2">
-              <a href={`tel:${contactData?.phone}`} className="hover:text-blue-400 transition">
-                {contactData?.phone}
-              </a>
-            </p>
-            <p className="mb-2">
-              <a href={`mailto:${contactData?.email}`} className="hover:text-blue-400 transition">
-                {contactData?.email}
-              </a>
-            </p>
-            <p className="text-sm text-gray-400">{contactData?.address}</p>
+      <footer className="customizable-footer py-16 px-4 bg-gray-900 text-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 text-center">
+            {/* Logo & Company */}
+            <div className="col-span-full lg:col-span-1">
+              <img src="/assets/images/logo-no-bg.png" alt="Hance Land Service Logo" className="h-24 mb-4 mx-auto" />
+              <p className="text-lg font-semibold mb-2">{contactData?.businessName}</p>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Professional land clearing, mulching, and pond building services in Northeast Oklahoma.
+              </p>
+            </div>
+            
+            {/* Services */}
+            <div>
+              <h3 className="font-bold text-lg mb-4">Our Services</h3>
+              <ul className="space-y-2 text-gray-300 list-none">
+                {sortedServices.map((service) => (
+                  <li key={service.slug}>
+                    <a href={`#service-${service.slug}`} className="hover:text-orange-500 transition">
+                      {service.entry.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            {/* Portfolio */}
+            <div>
+              <h3 className="font-bold text-lg mb-4">Our Work</h3>
+              <ul className="space-y-2 text-gray-300 list-none">
+                {sortedPortfolio.map((project) => (
+                  <li key={project.slug}>
+                    <a href="#portfolio" className="hover:text-orange-500 transition">
+                      {project.entry.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            {/* Quick Links & Social */}
+            <div>
+              <h3 className="font-bold text-lg mb-4">Quick Links</h3>
+              <ul className="space-y-2 text-gray-300 mb-6 list-none">
+                <li><a href="#about" className="hover:text-orange-500 transition">About Us</a></li>
+                <li><a href="#services" className="hover:text-orange-500 transition">Services</a></li>
+                <li><a href="#portfolio" className="hover:text-orange-500 transition">Portfolio</a></li>
+                <li><a href="#contact" className="hover:text-orange-500 transition">Contact</a></li>
+              </ul>
+              
+              <h3 className="font-bold text-lg mb-4">Follow Us</h3>
+              {contactData?.socialMedia && contactData.socialMedia.length > 0 && (
+                <div className="flex gap-4 justify-center">
+                  {contactData.socialMedia.map((social, index) => (
+                    <SocialMediaIcon 
+                      key={index} 
+                      platform={social.platform} 
+                      url={social.url}
+                      className="text-4xl"
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           
-          {/* Social Media Links */}
-          {contactData?.socialMedia && contactData.socialMedia.length > 0 && (
-            <div className="flex justify-center gap-6 py-6">
-              {contactData.socialMedia.map((social, index) => (
-                <SocialMediaIcon 
-                  key={index} 
-                  platform={social.platform} 
-                  url={social.url}
-                  className="w-8 h-8"
-                />
-              ))}
-            </div>
-          )}
-          
-          <div className="border-t border-gray-700 pt-6">
+          {/* Copyright */}
+          <div className="border-t border-gray-700 pt-8 text-center">
             <p className="text-sm text-gray-400">
               &copy; {new Date().getFullYear()} {contactData?.businessName}. All rights reserved.
             </p>
