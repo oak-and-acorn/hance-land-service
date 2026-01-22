@@ -15,19 +15,28 @@ export default function ContactForm() {
     const formData = new FormData(form)
 
     try {
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData as any).toString(),
+      // Encode form data
+      const urlEncodedData = new URLSearchParams()
+      formData.forEach((value, key) => {
+        urlEncodedData.append(key, value.toString())
       })
 
-      if (response.ok) {
+      const response = await fetch('/contact-form.html', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: urlEncodedData.toString(),
+      })
+
+      // Netlify returns various status codes: 200, 303, etc.
+      if (response.ok || response.status === 303) {
         setSubmitMessage('Thank you! Your message has been sent successfully.')
         form.reset()
       } else {
+        console.error('Form submission failed:', response.status, response.statusText)
         setSubmitMessage('Oops! There was a problem submitting your form. Please try again.')
       }
     } catch (error) {
+      console.error('Form submission error:', error)
       setSubmitMessage('Oops! There was a problem submitting your form. Please try again.')
     } finally {
       setIsSubmitting(false)
@@ -40,6 +49,7 @@ export default function ContactForm() {
       <form 
         name="contact" 
         method="POST" 
+        action="/contact-form.html"
         data-netlify="true" 
         netlify-honeypot="bot-field" 
         onSubmit={handleSubmit}
