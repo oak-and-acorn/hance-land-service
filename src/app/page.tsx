@@ -4,6 +4,7 @@ import React from 'react'
 import { draftMode } from 'next/headers'
 import PortfolioCarousel from '../components/PortfolioCarousel'
 import SocialMediaIcon from '../components/SocialMediaIcon'
+import ContactForm from '../components/ContactForm'
 
 // Disable static generation for preview mode
 export const dynamic = 'force-dynamic'
@@ -351,67 +352,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
             </div>
             
             {/* Contact Form - Takes remaining width */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 w-full lg:w-auto lg:flex-1">
-              <h3 className="text-2xl font-bold mb-6">Send us a message</h3>
-              <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" className="space-y-4">
-                <input type="hidden" name="form-name" value="contact" />
-                <p className="hidden">
-                  <label>
-                    Don't fill this out if you're human: <input name="bot-field" />
-                  </label>
-                </p>
-                
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-2">Name *</label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    required 
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" 
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">Email *</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    required 
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" 
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium mb-2">Phone</label>
-                  <input 
-                    type="tel" 
-                    id="phone" 
-                    name="phone" 
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white" 
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">Message *</label>
-                  <textarea 
-                    id="message" 
-                    name="message" 
-                    required 
-                    rows={4} 
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
-                  />
-                </div>
-                
-                <button 
-                  type="submit" 
-                  className="w-full customizable-btn customizable-btn-primary px-6 py-3 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transition duration-300"
-                >
-                  Send Message
-                </button>
-              </form>
-            </div>
+            <ContactForm />
           </div>
           </div>
         </section>
