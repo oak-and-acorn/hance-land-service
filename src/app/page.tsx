@@ -334,11 +334,13 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                   <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                     <p className="text-sm font-semibold mb-2">Follow Us</p>
                     <div className="flex gap-3">
-                      {contactData.socialMedia.map((social, index) => (
+                      {contactData.socialMedia
+                        .filter(social => social.url)
+                        .map((social, index) => (
                         <SocialMediaIcon 
                           key={index} 
                           platform={social.platform} 
-                          url={social.url}
+                          url={social.url!}
                           className="text-4xl"
                         />
                       ))}
@@ -468,11 +470,13 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
               <h3 className="font-bold text-lg mb-4">Follow Us</h3>
               {contactData?.socialMedia && contactData.socialMedia.length > 0 && (
                 <div className="flex gap-4 justify-center">
-                  {contactData.socialMedia.map((social, index) => (
+                  {contactData.socialMedia
+                    .filter(social => social.url)
+                    .map((social, index) => (
                     <SocialMediaIcon 
                       key={index} 
                       platform={social.platform} 
-                      url={social.url}
+                      url={social.url!}
                       className="text-4xl"
                     />
                   ))}
